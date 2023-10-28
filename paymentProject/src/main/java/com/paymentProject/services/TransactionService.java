@@ -5,7 +5,6 @@ import com.paymentProject.entities.Transaction;
 import com.paymentProject.entities.User;
 import com.paymentProject.repositories.TransactionRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -24,7 +23,6 @@ public class TransactionService {
     private final AccountService accountService;
     private final RestTemplate restTemplate;
 
-    @Autowired
     public TransactionService(TransactionRepository transactionRepository,
                               UserService userService,
                               AccountService accountService,

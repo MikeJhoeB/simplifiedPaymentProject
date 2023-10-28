@@ -4,7 +4,6 @@ import com.paymentProject.dtos.UserDTO;
 import com.paymentProject.entities.User;
 import com.paymentProject.enums.UserType;
 import com.paymentProject.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -16,7 +15,6 @@ public class UserService {
     private final UserRepository userRepository;
     private final AccountService accountService;
 
-    @Autowired
     public UserService(UserRepository userRepository,
                        AccountService accountService) {
         this.userRepository = userRepository;

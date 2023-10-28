@@ -3,7 +3,6 @@ package com.paymentProject.controllers;
 import com.paymentProject.dtos.UserDTO;
 import com.paymentProject.entities.User;
 import com.paymentProject.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +14,6 @@ public class UserController {
 
     private final UserService userService;
 
-    @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
