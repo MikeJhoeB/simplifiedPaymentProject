@@ -1,8 +1,11 @@
 package com.paymentProject.services;
 
-import com.paymentProject.dtos.TransactionDTO;
+import com.paymentProject.dtos.request.TransactionDTO;
 import com.paymentProject.entities.Transaction;
 import com.paymentProject.entities.User;
+import com.paymentProject.exceptions.AccountException;
+import com.paymentProject.exceptions.TransactionException;
+import com.paymentProject.exceptions.UserException;
 import com.paymentProject.repositories.TransactionRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
@@ -34,7 +37,7 @@ public class TransactionService {
     }
 
     @Transactional(rollbackOn = Exception.class)
-    public Transaction createTransaction(TransactionDTO transactionRequest) throws Exception {
+    public Transaction createTransaction(TransactionDTO transactionRequest) throws TransactionException, UserException, AccountException {
         var transactionValue = transactionRequest.value();
         var sendingUser = userService.getUserById(transactionRequest.sendingUserId());
 
@@ -46,12 +49,12 @@ public class TransactionService {
         debitAndCreditTransactionValue(sendingUser, transactionValue, receivingUser);
 
 //        if (!validateTransactionExternally())
-//            throw new Exception("Transaction was not authorized by external sources");
+//            throw new TransactionException("Transaction was not authorized by external sources", HttpStatus.INTERNAL_SERVER_ERROR);
 
         return transactionRepository.save(transaction);
     }
 
-    private void debitAndCreditTransactionValue(User sendingUser, BigDecimal transactionValue, User receivingUser) throws Exception {
+    private void debitAndCreditTransactionValue(User sendingUser, BigDecimal transactionValue, User receivingUser) throws AccountException {
         accountService.debitValue(sendingUser, transactionValue);
         accountService.creditValue(receivingUser, transactionValue);
     }
@@ -76,23 +79,23 @@ public class TransactionService {
                 .build();
     }
 
-    public Transaction getTransactionById(Long transactionId) throws Exception {
+    public Transaction getTransactionById(Long transactionId) throws TransactionException {
         return transactionRepository.findById(transactionId)
-                .orElseThrow(() -> new Exception("Transaction not found"));
+                .orElseThrow(() -> new TransactionException("Transaction not found", HttpStatus.NOT_FOUND));
     }
 
-    public List<Transaction> getAllTransactionsByUserId(Long userId) throws Exception {
+    public List<Transaction> getAllTransactionsByUserId(Long userId) throws TransactionException {
         return transactionRepository.findAllBySendingUserIdOrReceivingUserId(userId, userId)
-                .orElseThrow(() -> new Exception("Transactions not found"));
+                .orElseThrow(() -> new TransactionException("Transactions not found", HttpStatus.NOT_FOUND));
     }
 
-    public List<Transaction> getAllSendingTransactionsByUserId(Long userId) throws Exception {
+    public List<Transaction> getAllSendingTransactionsByUserId(Long userId) throws TransactionException {
         return transactionRepository.findAllBySendingUserId(userId)
-                .orElseThrow(() -> new Exception("Transactions not found"));
+                .orElseThrow(() -> new TransactionException("Transactions not found", HttpStatus.NOT_FOUND));
     }
 
-    public List<Transaction> getAllReceivingTransactionsByUserId(Long userId) throws Exception {
+    public List<Transaction> getAllReceivingTransactionsByUserId(Long userId) throws TransactionException {
         return transactionRepository.findAllByReceivingUserId(userId)
-                .orElseThrow(() -> new Exception("Transactions not found"));
+                .orElseThrow(() -> new TransactionException("Transactions not found", HttpStatus.NOT_FOUND));
     }
 }

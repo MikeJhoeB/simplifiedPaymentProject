@@ -1,6 +1,6 @@
 package com.paymentProject.controllers;
 
-import com.paymentProject.dtos.TransactionDTO;
+import com.paymentProject.dtos.request.TransactionDTO;
 import com.paymentProject.entities.Transaction;
 import com.paymentProject.services.TransactionService;
 import org.springframework.http.ResponseEntity;
