@@ -2,13 +2,11 @@ package com.paymentProject.entities;
 
 import com.paymentProject.enums.UserType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity(name = "users")
 @Table(name = "users")
+@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
