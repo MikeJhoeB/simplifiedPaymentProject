@@ -20,8 +20,10 @@ public class Transaction {
     public BigDecimal value;
     public TransactionStatus status;
     @ManyToOne
+    @JoinColumn(name = "sending_user_id")
     public User sendingUser;
     @ManyToOne
+    @JoinColumn(name = "receiving_user_id")
     public User receivingUser;
 
 }
