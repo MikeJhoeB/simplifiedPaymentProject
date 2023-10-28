@@ -17,6 +17,7 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
     @OneToOne
+    @JoinColumn(name = "user_id")
     public User user;
-    public BigDecimal balance = BigDecimal.ZERO;
+    public BigDecimal balance;
 }

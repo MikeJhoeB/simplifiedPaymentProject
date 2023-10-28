@@ -4,10 +4,10 @@ import com.paymentProject.dtos.UserDTO;
 import com.paymentProject.entities.User;
 import com.paymentProject.enums.UserType;
 import com.paymentProject.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -15,7 +15,6 @@ public class UserService {
     private final UserRepository userRepository;
     private final AccountService accountService;
 
-    @Autowired
     public UserService(UserRepository userRepository,
                        AccountService accountService) {
         this.userRepository = userRepository;
@@ -34,15 +33,19 @@ public class UserService {
                 .orElseThrow(() -> new Exception("Usuário não encontrado"));
     }
 
-    public boolean validateUserCanTransact(User user, BigDecimal value) throws Exception {
-        var userAccount = accountService.getAccountByUser(user);
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    public void validateUserCanTransact(User user, BigDecimal value) throws Exception {
         if (user.getUserType().equals(UserType.SELLER_USER))
             throw new Exception("This user type can not transact sending money");
+
+        var userAccount = accountService.getAccountByUser(user);
 
         if (userAccount.getBalance().compareTo(value) < 0)
             throw new Exception("User has no balance available");
 
-        return true;
     }
 
     private static User userDtoToEntity(UserDTO newUser) {
