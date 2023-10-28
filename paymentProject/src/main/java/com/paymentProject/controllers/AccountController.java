@@ -1,6 +1,7 @@
 package com.paymentProject.controllers;
 
 import com.paymentProject.entities.Account;
+import com.paymentProject.exceptions.AccountException;
 import com.paymentProject.services.AccountService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +20,7 @@ public class AccountController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<Account> getAccountByUserId (@PathVariable Long userId) throws Exception {
+    public ResponseEntity<Account> getAccountByUserId (@PathVariable Long userId) throws AccountException {
         Account account = accountService.getAccountByUserId(userId);
         return ResponseEntity.ok().body(account);
     }

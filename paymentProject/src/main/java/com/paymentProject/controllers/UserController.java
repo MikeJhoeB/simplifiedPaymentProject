@@ -1,7 +1,8 @@
 package com.paymentProject.controllers;
 
-import com.paymentProject.dtos.UserDTO;
+import com.paymentProject.dtos.request.UserDTO;
 import com.paymentProject.entities.User;
+import com.paymentProject.exceptions.UserException;
 import com.paymentProject.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,13 +20,13 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody UserDTO user) {
+    public ResponseEntity<User> createUser(@RequestBody UserDTO user) throws UserException {
         User createdUser = userService.createUser(user);
         return ResponseEntity.ok().body(createdUser);
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<User> getUserById(@PathVariable Long userId) throws Exception {
+    public ResponseEntity<User> getUserById(@PathVariable Long userId) throws UserException {
         User user = userService.getUserById(userId);
         return ResponseEntity.ok().body(user);
     }
