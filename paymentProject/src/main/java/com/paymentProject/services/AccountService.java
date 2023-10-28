@@ -3,7 +3,6 @@ package com.paymentProject.services;
 import com.paymentProject.entities.Account;
 import com.paymentProject.entities.User;
 import com.paymentProject.repositories.AccountRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -13,7 +12,6 @@ public class AccountService {
 
     private final AccountRepository accountRepository;
 
-    @Autowired
     public AccountService(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
     }
@@ -27,6 +25,11 @@ public class AccountService {
 
     public Account getAccountById(Long accountId) throws Exception {
         return accountRepository.findById(accountId)
+                .orElseThrow(() -> new Exception("Account not found"));
+    }
+
+    public Account getAccountByUserId(Long userId) throws Exception {
+        return accountRepository.findAccountByUserId(userId)
                 .orElseThrow(() -> new Exception("Account not found"));
     }
 
