@@ -1,5 +1,6 @@
 package com.paymentProject.services;
 
+import com.paymentProject.dtos.UserDTO;
 import com.paymentProject.entities.User;
 import com.paymentProject.enums.UserType;
 import com.paymentProject.repositories.UserRepository;
@@ -21,8 +22,9 @@ public class UserService {
         this.accountService = accountService;
     }
 
-    public User createUser(User user) {
-        var createdUser = userRepository.save(user);
+    public User createUser(UserDTO newUser) {
+        var userEntity = userDtoToEntity(newUser);
+        var createdUser = userRepository.save(userEntity);
         accountService.createAccount(createdUser);
         return createdUser;
     }
@@ -41,6 +43,17 @@ public class UserService {
             throw new Exception("User has no balance available");
 
         return true;
+    }
+
+    private static User userDtoToEntity(UserDTO newUser) {
+        return User.builder()
+                .firstName(newUser.firstName())
+                .lastName(newUser.lastName())
+                .document(newUser.document())
+                .email(newUser.email())
+                .password(newUser.password())
+                .userType(newUser.userType())
+                .build();
     }
 
 }

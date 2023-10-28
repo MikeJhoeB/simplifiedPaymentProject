@@ -1,30 +1,36 @@
 package com.paymentProject.services;
 
+import com.paymentProject.dtos.TransactionDTO;
 import com.paymentProject.entities.Transaction;
 import com.paymentProject.entities.User;
 import com.paymentProject.repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Service
 public class TransactionService {
 
     private final TransactionRepository transactionRepository;
+    private final UserService userService;
 
     @Autowired
-    public TransactionService(TransactionRepository transactionRepository) {
+    public TransactionService(TransactionRepository transactionRepository,
+                              UserService userService) {
         this.transactionRepository = transactionRepository;
+        this.userService = userService;
     }
 
-    public Transaction createTransaction(User sendingUser, User receivingUser, BigDecimal value) {
-        var transaction = Transaction.builder()
-                .sendingUser(sendingUser)
-                .receivingUser(receivingUser)
-                .value(value)
-                .build();
+    public Transaction createTransaction(TransactionDTO transactionRequest) throws Exception {
+        var sendingUser = userService.getUserById(transactionRequest.sendingUserId());
+
+        userService.validateUserCanTransact(sendingUser, transactionRequest.value());
+
+        var receivingUser = userService.getUserById(transactionRequest.receivingUserId());
+
+        var transaction = buildTransaction(transactionRequest, sendingUser, receivingUser);
+
         return transactionRepository.save(transaction);
     }
 
@@ -46,5 +52,14 @@ public class TransactionService {
     public List<Transaction> getAllReceivingTransactionsByUser(User user) throws Exception {
         return transactionRepository.findAllByReceivingUser(user)
                 .orElseThrow(() -> new Exception("Transactions not found"));
+    }
+
+    private static Transaction buildTransaction(TransactionDTO transactionRequest,
+                                                User sendingUser, User receivingUser) {
+        return Transaction.builder()
+                .sendingUser(sendingUser)
+                .receivingUser(receivingUser)
+                .value(transactionRequest.value())
+                .build();
     }
 }
