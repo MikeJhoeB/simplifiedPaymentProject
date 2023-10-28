@@ -2,15 +2,13 @@ package com.paymentProject.entities;
 
 import com.paymentProject.enums.TransactionStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 
 @Entity(name = "transactions")
 @Table(name = "transactions")
+@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
