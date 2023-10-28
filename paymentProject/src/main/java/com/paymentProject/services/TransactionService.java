@@ -45,8 +45,8 @@ public class TransactionService {
         var transaction = buildTransaction(transactionRequest, sendingUser, receivingUser);
         debitAndCreditTransactionValue(sendingUser, transactionValue, receivingUser);
 
-        if (!validateTransactionExternally())
-            throw new Exception("Transaction was not authorized by external sources");
+//        if (!validateTransactionExternally())
+//            throw new Exception("Transaction was not authorized by external sources");
 
         return transactionRepository.save(transaction);
     }
@@ -81,18 +81,18 @@ public class TransactionService {
                 .orElseThrow(() -> new Exception("Transaction not found"));
     }
 
-    public List<Transaction> getAllTransactionsByUser(User user) throws Exception {
-        return transactionRepository.findAllBySendingUserOrReceivingUser(user, user)
+    public List<Transaction> getAllTransactionsByUserId(Long userId) throws Exception {
+        return transactionRepository.findAllBySendingUserIdOrReceivingUserId(userId, userId)
                 .orElseThrow(() -> new Exception("Transactions not found"));
     }
 
-    public List<Transaction> getAllSendingTransactionsByUser(User user) throws Exception {
-        return transactionRepository.findAllBySendingUser(user)
+    public List<Transaction> getAllSendingTransactionsByUserId(Long userId) throws Exception {
+        return transactionRepository.findAllBySendingUserId(userId)
                 .orElseThrow(() -> new Exception("Transactions not found"));
     }
 
-    public List<Transaction> getAllReceivingTransactionsByUser(User user) throws Exception {
-        return transactionRepository.findAllByReceivingUser(user)
+    public List<Transaction> getAllReceivingTransactionsByUserId(Long userId) throws Exception {
+        return transactionRepository.findAllByReceivingUserId(userId)
                 .orElseThrow(() -> new Exception("Transactions not found"));
     }
 }

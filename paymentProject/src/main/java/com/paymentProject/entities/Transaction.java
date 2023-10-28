@@ -1,6 +1,5 @@
 package com.paymentProject.entities;
 
-import com.paymentProject.enums.TransactionStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,7 +17,6 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
     public BigDecimal value;
-    public TransactionStatus status;
     @ManyToOne
     @JoinColumn(name = "sending_user_id")
     public User sendingUser;

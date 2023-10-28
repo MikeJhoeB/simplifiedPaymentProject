@@ -38,9 +38,10 @@ public class UserService {
     }
 
     public void validateUserCanTransact(User user, BigDecimal value) throws Exception {
-        var userAccount = accountService.getAccountByUser(user);
         if (user.getUserType().equals(UserType.SELLER_USER))
             throw new Exception("This user type can not transact sending money");
+
+        var userAccount = accountService.getAccountByUser(user);
 
         if (userAccount.getBalance().compareTo(value) < 0)
             throw new Exception("User has no balance available");

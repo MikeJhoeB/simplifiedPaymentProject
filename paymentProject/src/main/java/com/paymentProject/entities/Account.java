@@ -19,5 +19,5 @@ public class Account {
     @OneToOne
     @JoinColumn(name = "user_id")
     public User user;
-    public BigDecimal balance = BigDecimal.ZERO;
+    public BigDecimal balance;
 }

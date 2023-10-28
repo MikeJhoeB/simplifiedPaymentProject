@@ -19,6 +19,7 @@ public class AccountService {
     public void createAccount(User user) {
         var account = Account.builder()
                 .user(user)
+                .balance(BigDecimal.TEN)
                 .build();
         accountRepository.save(account);
     }
