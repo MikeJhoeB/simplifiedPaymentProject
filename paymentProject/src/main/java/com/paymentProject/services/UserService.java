@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -34,7 +35,11 @@ public class UserService {
                 .orElseThrow(() -> new Exception("Usuário não encontrado"));
     }
 
-    public boolean validateUserCanTransact(User user, BigDecimal value) throws Exception {
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    public void validateUserCanTransact(User user, BigDecimal value) throws Exception {
         var userAccount = accountService.getAccountByUser(user);
         if (user.getUserType().equals(UserType.SELLER_USER))
             throw new Exception("This user type can not transact sending money");
@@ -42,7 +47,6 @@ public class UserService {
         if (userAccount.getBalance().compareTo(value) < 0)
             throw new Exception("User has no balance available");
 
-        return true;
     }
 
     private static User userDtoToEntity(UserDTO newUser) {
