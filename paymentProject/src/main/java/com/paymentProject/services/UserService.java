@@ -37,7 +37,7 @@ public class UserService {
 
     public User getUserById(Long userid) throws UserException {
         return userRepository.findById(userid)
-                .orElseThrow(() -> new UserException("Usuário não encontrado", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new UserException("User not found", HttpStatus.NOT_FOUND));
     }
 
     public List<User> getAllUsers() {
@@ -46,7 +46,7 @@ public class UserService {
 
     public void validateUserCanTransact(User user, BigDecimal value) throws AccountException, UserException {
         if (user.getUserType().equals(UserType.SELLER_USER))
-            throw new AccountException("This user type can not transact sending money", HttpStatus.BAD_REQUEST);
+            throw new UserException("This user type can not transact sending money", HttpStatus.BAD_REQUEST);
 
         var userAccount = accountService.getAccountByUser(user);
 

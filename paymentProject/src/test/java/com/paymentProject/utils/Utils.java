@@ -1,5 +1,6 @@
 package com.paymentProject.utils;
 
+import com.paymentProject.dtos.request.UserDTO;
 import com.paymentProject.entities.Account;
 import com.paymentProject.entities.User;
 import com.paymentProject.enums.UserType;
@@ -8,17 +9,40 @@ import java.math.BigDecimal;
 
 public class Utils {
 
-    public static Account getAccount() {
+    public static Account getAccountEntity() {
         return Account.builder()
                 .id(1L)
-                .user(getCommonUser())
+                .user(getCommonUserEntity())
                 .balance(BigDecimal.TEN)
                 .build();
     }
 
-    public static User getCommonUser() {
+    public static User getCommonUserEntity() {
         return User.builder()
                 .id(1L)
+                .firstName("João")
+                .lastName("Almeida")
+                .document("11111111111")
+                .email("joao@gmail.com")
+                .password("123")
+                .userType(UserType.COMMON_USER)
+                .build();
+    }
+
+    public static User getSellerUserEntity() {
+        return User.builder()
+                .id(1L)
+                .firstName("João")
+                .lastName("Almeida")
+                .document("11111111111")
+                .email("joao@gmail.com")
+                .password("123")
+                .userType(UserType.SELLER_USER)
+                .build();
+    }
+
+    public static UserDTO getCommonUserDTO() {
+        return UserDTO.builder()
                 .firstName("João")
                 .lastName("Almeida")
                 .document("11111111111")
