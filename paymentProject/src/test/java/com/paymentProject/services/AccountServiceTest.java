@@ -30,7 +30,7 @@ class AccountServiceTest {
     AccountService service;
 
     @Test
-    void createAccount() {
+    void givenValidUser_shouldCreateAccount() {
         ArgumentCaptor<Account> accountCaptor = ArgumentCaptor.forClass(Account.class);
         assertDoesNotThrow(() -> service.createAccount(getCommonUser()));
 
@@ -39,7 +39,6 @@ class AccountServiceTest {
         assertNotNull(capturedAccount);
         assertEquals("João", capturedAccount.getUser().getFirstName());
         assertEquals(BigDecimal.TEN, capturedAccount.getBalance());
-
     }
 
     @Test
@@ -55,7 +54,9 @@ class AccountServiceTest {
     void givenUserIdThatHasNotAnAccount_whenGetAccountByUserId_thenShouldThrowException() {
         when(accountRepository.findAccountByUserId(anyLong())).thenReturn(Optional.empty());
 
-        assertThrows(AccountException.class, () -> service.getAccountByUserId(1L));
+        var response = assertThrows(AccountException.class, () -> service.getAccountByUserId(1L));
+        assertNotNull(response);
+        assertEquals("Account not found", response.getMessage());
     }
 
     @Test
@@ -72,11 +73,13 @@ class AccountServiceTest {
     void givenUserThatHasNotAnAccount_whenGetAccountByUser_thenShouldThrowException() {
         when(accountRepository.findAccountByUser(any())).thenReturn(Optional.empty());
 
-        assertThrows(AccountException.class, () -> service.getAccountByUser(getCommonUser()));
+        var response = assertThrows(AccountException.class, () -> service.getAccountByUser(getCommonUser()));
+        assertNotNull(response);
+        assertEquals("Account not found", response.getMessage());
     }
 
     @Test
-    void debitValue() {
+    void givenValidAccount_shouldDebitValue() {
         ArgumentCaptor<Account> accountCaptor = ArgumentCaptor.forClass(Account.class);
         when(accountRepository.findAccountByUser(any())).thenReturn(Optional.ofNullable(getAccount()));
 
@@ -89,7 +92,7 @@ class AccountServiceTest {
     }
 
     @Test
-    void creditValue() {
+    void givenValidAccount_shouldCreditValue() {
         ArgumentCaptor<Account> accountCaptor = ArgumentCaptor.forClass(Account.class);
         when(accountRepository.findAccountByUser(any())).thenReturn(Optional.ofNullable(getAccount()));
 
@@ -99,6 +102,26 @@ class AccountServiceTest {
         Account capturedAccount = accountCaptor.getValue();
         assertNotNull(capturedAccount);
         assertEquals(BigDecimal.valueOf(20L), capturedAccount.getBalance());
+    }
+
+    @Test
+    void givenInvalidAccount_whenTryToDebitValue_shouldThrowNotFoundException() {
+        when(accountRepository.findAccountByUser(any())).thenReturn(Optional.empty());
+
+        var response = assertThrows(AccountException.class, () -> service.debitValue(getCommonUser(), BigDecimal.TEN));
+
+        assertNotNull(response);
+        assertEquals("Account not found", response.getMessage());
+    }
+
+    @Test
+    void givenInvalidAccount_whenTryToCreditValue_shouldThrowNotFoundException() {
+        when(accountRepository.findAccountByUser(any())).thenReturn(Optional.empty());
+
+        var response = assertThrows(AccountException.class, () -> service.creditValue(getCommonUser(), BigDecimal.TEN));
+
+        assertNotNull(response);
+        assertEquals("Account not found", response.getMessage());
     }
 
 }
