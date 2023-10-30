@@ -29,4 +29,16 @@ public class TransactionController {
         List<Transaction> transactions = transactionService.getAllTransactionsByUserId(userId);
         return ResponseEntity.ok().body(transactions);
     }
+
+    @GetMapping("/sender/{userId}")
+    public ResponseEntity<List<Transaction>> getAllUserAsSenderTransactions(@PathVariable Long userId) throws Exception {
+        List<Transaction> transactions = transactionService.getAllSendingTransactionsByUserId(userId);
+        return ResponseEntity.ok().body(transactions);
+    }
+
+    @GetMapping("/receiver/{userId}")
+    public ResponseEntity<List<Transaction>> getAllUserAsReceiverTransactions(@PathVariable Long userId) throws Exception {
+        List<Transaction> transactions = transactionService.getAllReceivingTransactionsByUserId(userId);
+        return ResponseEntity.ok().body(transactions);
+    }
 }

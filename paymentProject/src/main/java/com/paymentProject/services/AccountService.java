@@ -26,11 +26,6 @@ public class AccountService {
         accountRepository.save(account);
     }
 
-    public Account getAccountById(Long accountId) throws AccountException {
-        return accountRepository.findById(accountId)
-                .orElseThrow(() -> new AccountException("Account not found", HttpStatus.NOT_FOUND));
-    }
-
     public Account getAccountByUserId(Long userId) throws AccountException {
         return accountRepository.findAccountByUserId(userId)
                 .orElseThrow(() -> new AccountException("Account not found", HttpStatus.NOT_FOUND));
