@@ -1,7 +1,9 @@
 package com.paymentProject.utils;
 
+import com.paymentProject.dtos.request.TransactionDTO;
 import com.paymentProject.dtos.request.UserDTO;
 import com.paymentProject.entities.Account;
+import com.paymentProject.entities.Transaction;
 import com.paymentProject.entities.User;
 import com.paymentProject.enums.UserType;
 
@@ -31,13 +33,22 @@ public class Utils {
 
     public static User getSellerUserEntity() {
         return User.builder()
-                .id(1L)
-                .firstName("João")
+                .id(2L)
+                .firstName("Almeida")
                 .lastName("Almeida")
                 .document("11111111111")
                 .email("joao@gmail.com")
                 .password("123")
                 .userType(UserType.SELLER_USER)
+                .build();
+    }
+
+    public static Transaction getTransactionEntity() {
+        return Transaction.builder()
+                .id(1L)
+                .sendingUser(getCommonUserEntity())
+                .receivingUser(getSellerUserEntity())
+                .value(BigDecimal.TEN)
                 .build();
     }
 
@@ -49,6 +60,14 @@ public class Utils {
                 .email("joao@gmail.com")
                 .password("123")
                 .userType(UserType.COMMON_USER)
+                .build();
+    }
+
+    public static TransactionDTO getTransactionDTO() {
+        return TransactionDTO.builder()
+                .sendingUserId(1L)
+                .receivingUserId(2L)
+                .value(BigDecimal.TEN)
                 .build();
     }
 }
